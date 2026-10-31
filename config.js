@@ -3,15 +3,67 @@
 // =====================================================
 const CONFIG = {
   title: "A3RO",
-  subtitle: "Tap start, then point your camera at an 👁 icon on the poster",
+  subtitle: "Tap start, then point your camera at an 3R icon on the poster",
 
   // ORDER MATTERS!  Item #1 = the FIRST image you uploaded to the MindAR compiler,
   // item #2 = the SECOND image, and so on.
-  // type can be: "image" | "video" | "slideshow" | "model" | "simulator"
-  targets: [  
-    { title: "Our Aerogel Synthesis", type: "slideshow", auto: false, seconds: 4,
-      slides:   ["media/Gel1.jpg", "media/Chiller1.jpg", "media/Liofi1.jpg","media/AerogelCel.jpg","media/CALSES1.jpg" ],
-      captions: ["Step 1: Gel Formation", "Step 2: Chiller Setup", "Step 3: Liofilization", "Step 4: Cellulose Aerogel", "Step 5: Carbon Aerogel"] },
+  // The number of entries below MUST equal the number of images you compiled.
+  //
+  // RULES: every entry ends with a comma. Use straight quotes "like this".
+  //        File names are case-sensitive and live in the media folder: "media/Gel1.jpg".
+  targets: [
+
+    // ================= TARGET 1 (active) =================
+    // GALLERY: a slideshow where every slide can be an image, video or 3D model.
+    { title: "Our Aerogel Synthesis", type: "gallery", auto: false, seconds: 4,
+      items: [
+        { type: "image", src: "media/Gel1.jpg",       caption: "Step 1: Gel Formation" },
+        { type: "image", src: "media/Chiller1.jpg",   caption: "Step 2: Chiller Setup" },
+        { type: "image", src: "media/Liofi1.jpg",     caption: "Step 3: Liofilization" },
+        { type: "image", src: "media/AerogelCel.jpg", caption: "Step 4: Cellulose Aerogel" },
+        { type: "image", src: "media/CALSES1.jpg",    caption: "Step 5: Carbon Aerogel" },
+      ] },
+    { title: "Columns in action", type: "gallery", auto: false, seconds: 4,
+      items: [
+        { type: "video", src: "media/CADFlow.mp4",       caption: "Flow velocity CFD" },
+        { type: "model", src: "media/Romicolumns.glb",   caption: "Patented Column Design" },
+      ] }
+
+    // =====================================================
+    //  TEMPLATES  (copy one, delete the leading //, edit it)
+    //  Each one you add = one more image in the MindAR compiler, in the same order.
+    // =====================================================
+
+    // ---- SINGLE IMAGE ----
+    // { title: "Our Cube", type: "image", src: "media/cube.jpg", caption: "Our prototype" },
+
+    // ---- SINGLE VIDEO (.mp4, a few MB) ----
+    // { title: "Demo video", type: "video", src: "media/demo.mp4", caption: "The cube in action" },
+
+    // ---- SINGLE 3D MODEL (.glb) ----
+    // scale: size (raise if tiny, lower if huge)   y: move up (+) / down (-)
+    // spin: true = starts spinning. false = still (user drags, pinches, or presses Spin).
+    // If the .glb has an animation, an "Animation" button appears by itself.
+    // { title: "A3RO Cube", type: "model", src: "media/cube.glb", caption: "Press Animation to explode it",
+    //   scale: 0.5, y: 0, spin: false },
+
+    // ---- GALLERY: MIX OF IMAGE + VIDEO + 3D MODEL ----
+    // auto: true = cycles by itself.  seconds = time per item (default for all).
+    // Give videos/models their own longer "seconds" so they are not cut off.
+    // { title: "Mixed gallery", type: "gallery", auto: true, seconds: 4,
+    //   items: [
+    //     { type: "image", src: "media/photo1.jpg", caption: "An image" },
+    //     { type: "video", src: "media/clip.mp4",   caption: "A video",    seconds: 10 },
+    //     { type: "model", src: "media/cube.glb",   caption: "A 3D model", seconds: 15, scale: 0.5, y: 0 },
+    //   ] },
+
+    // ---- SIMULATOR (sliders + animated graph; edit the SIM section below) ----
+    // { title: "Simulator", type: "simulator", caption: "Move the sliders!" },
+
+    // ---- OPTIONAL SETTING FOR image / video / model / gallery ----
+    // overlay: false  -> show it in the bottom panel instead of on top of the poster
+    // Example: { title: "Demo video", type: "video", src: "media/demo.mp4", overlay: false },
+
   ]
 };
 
