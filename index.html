@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AR</title>
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+<script src="config.js"></script>
+<style>
+body{margin:0;font-family:sans-serif;color:#fff}
+#start{position:fixed;inset:0;z-index:20;background:#0a2540;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+#go{font-size:1.2rem;padding:14px 30px;border:0;border-radius:10px;background:#00e5a0}
+#hint{position:fixed;top:12px;left:0;right:0;z-index:5;text-align:center;text-shadow:0 0 4px #000}
+#panel{display:none;position:fixed;left:0;right:0;bottom:0;max-height:70vh;overflow:auto;z-index:10;background:rgba(10,37,64,.92);padding:12px 16px 20px;border-radius:16px 16px 0 0}
+#panel img,#panel video,#panel canvas{width:100%;max-height:45vh;object-fit:contain;border-radius:8px}
+#panel input{width:100%}
+#sb{display:flex;gap:8px;justify-content:center;margin:8px 0}#sb button{padding:8px 14px;border:0;border-radius:8px;font-size:1rem}
+#x{float:right;border:0;background:#fff3;color:#fff;font-size:1.2rem;border-radius:50%;width:36px;height:36px}
+</style></head><body>
+<div id="start"><h1 id="ttl"></h1><p id="sub"></p><button id="go">Tap to start</button></div>
+<div id="hint">Point at an 👁 icon</div>
+<div id="panel"><button id="x">✕</button><h3 id="pt"></h3><div id="pc"></div><p id="pcap"></p></div>
+
+<a-scene mindar-image="imageTargetSrc:./targets.mind;autoStart:false;uiScanning:no;uiLoading:yes"
+ color-space="sRGB" vr-mode-ui="enabled:false" device-orientation-permission-ui="enabled:false">
+ <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
+</a-scene>
+
+<script>
+const $=id=>document.getElementById(id), scene=document.querySelector('a-scene');
+let cur=-1, raf, tmr;
+$('ttl').textContent=CONFIG.title; $('sub').textContent=CONFIG.subtitle;
+
+// one invisible AR target per item in CONFIG.targets (plus a pulsing ring)
+CONFIG.targets.forEach((t,i)=>{
+  const e=document.createElement('a-entity');
+  e.setAttribute('mindar-image-target','targetIndex:'+i);
+  e.innerHTML='<a-ring radius-inner="0.42" radius-outer="0.5" color="#00e5a0" animation="property:scale;to:1.15 1.15 1.15;dir:alternate;loop:true;dur:700"></a-ring>';
+  e.addEventListener('targetFound',()=>show(i));
+  scene.appendChild(e);
+});
+$('go').onclick=()=>{$('start').style.display='none';scene.systems['mindar-image-system'].start();};
+$('x').onclick=()=>{cancelAnimationFrame(raf);clearInterval(tmr);$('panel').style.display='none';$('pc').innerHTML='';cur=-1;$('hint').style.display='block';};
+
+function show(i){
+  if(i===cur)return; cur=i; cancelAnimationFrame(raf); clearInterval(tmr);
+  const t=CONFIG.targets[i], box=$('pc');
+  $('pt').textContent=t.title; $('pcap').textContent=t.caption||'';
+  if(t.type==='image') box.innerHTML=`<img src="${t.src}">`;
+  else if(t.type==='video') box.innerHTML=`<video src="${t.src}" controls autoplay muted loop playsinline></video>`;
+  else if(t.type==='model') box.innerHTML=`<model-viewer src="${t.src}" camera-controls auto-rotate style="width:100%;height:40vh"></model-viewer>`;
+  else if(t.type==='slideshow'){
+    const n=t.slides.length; let k=0, playing=!!t.auto;
+    box.innerHTML=`<img id="si"><div id="sb"><button id="pv">◀ Back</button><button id="pp"></button><button id="nx">Next ▶</button></div><input type="range" id="sr" min="0" max="${n-1}" value="0"><div id="sc"></div>`;
+    const go=j=>{k=(j+n)%n;$('si').src=t.slides[k];$('sr').value=k;$('sc').textContent=(t.captions&&t.captions[k])||('Slide '+(k+1)+' / '+n);};
+    const set=p=>{playing=p;$('pp').textContent=p?'⏸ Pause':'▶ Play';clearInterval(tmr);if(p)tmr=setInterval(()=>go(k+1),(t.seconds||3)*1000);};
+    $('pv').onclick=()=>{set(false);go(k-1);}; $('nx').onclick=()=>{set(false);go(k+1);};
+    $('sr').oninput=e=>{set(false);go(+e.target.value);}; $('pp').onclick=()=>set(!playing);
+    go(0); set(playing);
+  } else if(t.type==='simulator') simulator(box);
+  $('panel').style.display='block'; $('hint').style.display='none';
+}
+
+function simulator(box){
+  let h='';
+  SIM.sliders.forEach(s=>h+=`<label>${s.label}: <b id="v_${s.id}">${s.value}</b> ${s.unit}</label><input type="range" id="s_${s.id}" min="${s.min}" max="${s.max}" step="${s.step}" value="${s.value}">`);
+  box.innerHTML=h+'<canvas id="cv" width="600" height="340"></canvas>';
+  const run=()=>{
+    const v={}; SIM.sliders.forEach(s=>{v[s.id]=+$('s_'+s.id).value;$('v_'+s.id).textContent=v[s.id];});
+    const pts=SIM.model(v); let n=0; cancelAnimationFrame(raf);
+    (function step(){n+=4;plot(pts.slice(0,n));if(n<pts.length)raf=requestAnimationFrame(step);})();
+  };
+  SIM.sliders.forEach(s=>$('s_'+s.id).oninput=run); run();
+}
+function plot(p){
+  const c=$('cv'),g=c.getContext('2d'),W=c.width,H=c.height,m=50;
+  g.clearRect(0,0,W,H);g.strokeStyle='#fff';g.fillStyle='#fff';g.font='16px sans-serif';g.lineWidth=1;
+  g.beginPath();g.moveTo(m,10);g.lineTo(m,H-m);g.lineTo(W-10,H-m);g.stroke();
+  g.fillText(SIM.xlabel,W/2-30,H-12);g.save();g.translate(16,H/2+20);g.rotate(-Math.PI/2);g.fillText(SIM.ylabel,0,0);g.restore();
+  g.strokeStyle='#00e5a0';g.lineWidth=3;g.beginPath();
+  p.forEach((q,k)=>{const x=m+q.x/SIM.xmax*(W-m-10),y=(H-m)-q.y/SIM.ymax*(H-m-10);k?g.lineTo(x,y):g.moveTo(x,y);});
+  g.stroke();
+}
+</script></body></html>
