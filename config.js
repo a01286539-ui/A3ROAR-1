@@ -15,19 +15,35 @@ const CONFIG = {
 
     // ================= TARGET 1 (active) =================
     // GALLERY: a slideshow where every slide can be an image, video or 3D model.
-    { title: "Our Aerogel Synthesis", type: "gallery", auto: false, seconds: 4,
+     { title: "Our Aerogel Synthesis", type: "gallery", auto: false, seconds: 4,
       items: [
-        { type: "image", src: "media/Gel1.jpg",       caption: "Step 1: Gel Formation" },
-        { type: "image", src: "media/Chiller1.jpg",   caption: "Step 2: Chiller Setup" },
-        { type: "image", src: "media/Liofi1.jpg",     caption: "Step 3: Liofilization" },
-        { type: "image", src: "media/AerogelCel.jpg", caption: "Step 4: Cellulose Aerogel" },
-        { type: "image", src: "media/CALSES1.jpg",    caption: "Step 5: Carbon Aerogel" },
+        { type: "image", src: "media/CALSES1.jpg",    caption: "Carbon Aerogel" },
+        { type: "image", src: "media/Aerogel1.jpg",   caption: "Carbon Aerogel in several cups" },
       ] },
     { title: "Columns in action", type: "gallery", auto: false, seconds: 4,
       items: [
         { type: "video", src: "media/CADFlow.mp4",       caption: "Flow velocity CFD" },
         { type: "model", src: "media/Romicolumns.glb",   caption: "Patented Column Design" },
       ] }
+    { title: "Our Methodology", type: "gallery", auto: false, seconds: 4,
+      items: [
+        { type: "image", src: "media/Gel1.jpg",       caption: "Step 1: Gel Formation" },
+        { type: "image", src: "media/Chiller1.jpg",   caption: "Step 2: Chiller Setup" },
+        { type: "image", src: "media/Liofi1.jpg",     caption: "Step 3: Liofilization" },
+        { type: "image", src: "media/AerogelCel.jpg", caption: "Step 4: Cellulose Aerogel" },
+      ] },
+    { title: "Our Electronics", type: "gallery", auto: false, seconds: 4,
+      items: [
+        { type: "image", src: "media/PCB1.jpg",   caption: "PCB from the top" },
+        { type: "image", src: "media/PCB2.jpg",   caption: "PCB drawing" },
+        { type: "image", src: "media/PCB3.png",   caption: "PCB" },
+      ] },
+    { title: "Cube", type: "gallery", auto: false, seconds: 4,
+      items: [
+        { type: "video", src: "media/CAD.mp4",       caption: "Cube design" },
+      ] }
+
+
 
     // =====================================================
     //  TEMPLATES  (copy one, delete the leading //, edit it)
