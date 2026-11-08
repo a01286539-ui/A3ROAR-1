@@ -31,6 +31,7 @@ const CONFIG = {
         { type: "image", src: "media/Chiller1.jpg",   caption: "Step 2: Chiller Setup" },
         { type: "image", src: "media/Liofi1.jpg",     caption: "Step 3: Liofilization" },
         { type: "image", src: "media/AerogelCel.jpg", caption: "Step 4: Cellulose Aerogel" },
+        { type: "image", src: "media/Aerogel1.jpg",   caption: "Carbon Aerogel in several cups" },
       ] },
     { title: "Our Electronics", type: "gallery", auto: false, seconds: 4,
       items: [
