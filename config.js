@@ -36,7 +36,7 @@ const CONFIG = {
       items: [
         { type: "image", src: "media/PCB1.jpg",   caption: "PCB from the top" },
         { type: "image", src: "media/PCB2.jpg",   caption: "PCB drawing" },
-        { type: "image", src: "media/PCB3.png",   caption: "PCB" },
+        { type: "image", src: "media/PCB3.jpg",   caption: "PCB" },
       ] },
     { title: "Cube", type: "gallery", auto: false, seconds: 4,
       items: [
