@@ -24,7 +24,7 @@ const CONFIG = {
       items: [
         { type: "video", src: "media/CADFlow.mp4",       caption: "Flow velocity CFD" },
         { type: "model", src: "media/Romicolumns.glb",   caption: "Patented Column Design" },
-      ] }
+      ] },
     { title: "Our Methodology", type: "gallery", auto: false, seconds: 4,
       items: [
         { type: "image", src: "media/Gel1.jpg",       caption: "Step 1: Gel Formation" },
