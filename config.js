@@ -22,7 +22,7 @@ const CONFIG = {
       ] },
     { title: "Columns in action", type: "gallery", auto: false, seconds: 4,
       items: [
-        { type: "video", src: "media/CADFlowRCc.mp4",       caption: "Flow velocity CFD" },
+        { type: "video", src: "media/CADflowRCc.mp4",       caption: "Flow velocity CFD" },
         { type: "model", src: "media/Romicolumns.glb",   caption: "Patented Column Design" },
       ] },
     { title: "Our Methodology", type: "gallery", auto: false, seconds: 4,
